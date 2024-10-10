@@ -57,13 +57,18 @@ export default {
         Link
     },
     data: () => ({
-        siteName: 'Evaluación de desempeño Administrativos',
+        siteName: 'EDA',
     }),
 
     methods: {
         logout() {
             this.$inertia.post(route('logout'));
         },
+    },
+
+    async created() {
+        //Get the inicials
+
     }
 }
 </script>

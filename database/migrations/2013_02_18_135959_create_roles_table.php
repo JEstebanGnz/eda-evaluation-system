@@ -20,6 +20,16 @@ class CreateRolesTable extends Migration
             $table->decimal('assessment_weight',4,2)->nullable()->default(00.00);
             $table->timestamps();
         });
+
+
+        //Create the default roles (admin and functionary)
+        \Illuminate\Support\Facades\DB::table('roles')->insert(
+            [
+                ['name' => 'administrador', 'customId' => 10],
+                ['name' => 'funcionario', 'customId' => 3]
+            ]
+        );
+
     }
 
     /**

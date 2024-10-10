@@ -113,7 +113,7 @@
                 @confirmed-dialog="deleteRole(deletedRoleId)"
             >
                 <template v-slot:title>
-                    Estas a punto de eliminar el rol seleccionado
+                    Estás a punto de eliminar el rol seleccionado
                 </template>
 
                 ¡Cuidado! esta acción es irreversible

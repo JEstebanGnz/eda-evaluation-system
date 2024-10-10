@@ -9,6 +9,15 @@ import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 Vue.use(Vuetify)
 
+import es from 'vuetify/lib/locale/es'
+export default new Vuetify({
+    lang: {
+        locales: {es},
+        current: 'es'
+    },
+
+})
+
 Vue.mixin({ methods: { route } });
 Vue.use(InertiaPlugin);
 Vue.use(PortalVue);

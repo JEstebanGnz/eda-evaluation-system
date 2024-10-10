@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Users;
 
+use App\Helpers\AtlanteProvider;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetAllUsersRequest;
 use App\Http\Requests\UpdateUserRoleRequest;
+use App\Models\AcademicPeriod;
+use App\Models\AssessmentPeriod;
 use App\Models\Role;
+use App\Models\TeacherProfile;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -13,15 +17,17 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use SebastianBergmann\LinesOfCode\RuntimeException;
 
-class ApiUserController extends Controller
+class  ApiUserController extends Controller
 {    /**
  * @param GetAllUsersRequest $request
  * @return Builder[]|Collection
  */
     public function index(GetAllUsersRequest $request)
     {
-        return User::with('roles')->orderBy('name', 'DESC')->get();
+        return User::with('roles')->orderBy('name', 'ASC')->get();
     }
 
     /**
@@ -69,4 +75,5 @@ class ApiUserController extends Controller
         $user->roles()->sync($roles);
         return response()->json(['message' => 'Los roles del usuario han sido actualizado exitosamente']);
     }
+
 }

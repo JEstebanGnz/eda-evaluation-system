@@ -8,12 +8,16 @@
             right
         >
             {{ snackbar.text }}
-
         </v-snackbar>
+
+        <form :action="route('logout')" method="post" ref="logoutform">
+            <input type="hidden" name="_token" :value="csrf">
+        </form>
 
         <template v-slot:custom-v-app-bar-icon>
             <v-app-bar-nav-icon @click="drawer = true" class="white--text"></v-app-bar-nav-icon>
         </template>
+
         <template v-slot:app-bar-content>
             <template v-for="menuItem in menu"
                       v-if="$page.props.user.customRoleId >= menuItem.role">
@@ -42,7 +46,7 @@
 
             <template
                 v-for="dropdown in dropdowns"
-                v-if="$page.props.user.customRoleId >= dropdown.role">
+                v-if="$page.props.user.customRoleId === dropdown.role">
                 <v-menu
                     bottom
                     origin="center center"
@@ -96,12 +100,13 @@
                             {{ $page.props.user.name }}
                         </v-list-item-title>
                     </v-list-item>
-                    <v-list-item @click="logout">
+                    <v-list-item class="cursor-pointer" @click="logout">
                         <v-list-item-title>Cerrar sesion</v-list-item-title>
                     </v-list-item>
                 </v-list>
             </v-menu>
         </template>
+
         <!--Barra lateral-->
         <template v-slot:custom-navigation-drawer>
             <v-navigation-drawer
@@ -139,6 +144,8 @@
                                 <v-list-item-title>{{ item.name }}</v-list-item-title>
                             </v-list-item>
                         </template>
+
+
                         <!-- LINKS DE DROPDOWNS-->
                         <v-list-group
                             v-for="dropdown in dropdowns"
@@ -146,7 +153,7 @@
                             v-model="dropdown.active"
                             :prepend-icon="dropdown.icon"
                             no-action
-                            v-if="$page.props.user.customRoleId >= dropdown.role"
+                            v-if="$page.props.user.customRoleId === dropdown.role"
 
                         >
                             <!-- activator -->
@@ -158,29 +165,26 @@
 
 
                             <template v-for="dropdownItem in dropdown.items"
-                                      v-if="$page.props.user.customRoleId >= dropdownItem.role">
+                                      v-if="$page.props.user.customRoleId === dropdownItem.role">
 
                                 <Link as="v-list-item"
                                       v-if="!dropdownItem.method"
                                       :key="dropdownItem.name"
                                       :href="dropdownItem.href"
-
                                 >
                                     <v-list-item-content>
                                         <v-list-item-title v-text="dropdownItem.name"></v-list-item-title>
                                     </v-list-item-content>
                                 </Link>
 
-                                <v-list-item
+<!--                                <v-list-item
                                     @click="triggerFunction(dropdownItem.method)"
-                                    v-else
                                     :key="dropdownItem.name"
                                 >
-                                    <v-list-item-content>
+                                    <v-list-item-content  >
                                         <v-list-item-title v-text="dropdownItem.name"></v-list-item-title>
                                     </v-list-item-content>
-                                </v-list-item>
-
+                                </v-list-item>-->
                             </template>
 
                         </v-list-group>
@@ -225,12 +229,14 @@ export default {
             timeout: 3000
         },
 
+        csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+
         drawer: false,
         menu:
             [{
                 name: 'Cambiar Rol',
                 href: route('pickRole'),
-                role: 1,
+                role: 3,
                 icon: 'mdi-calendar'
             },],
         dropdowns: [
@@ -242,55 +248,116 @@ export default {
                 items: [
                     {
                         name: 'Periodos de evaluación',
-                        href: route('users.index'),
-                        role: 3,
-                        icon: 'mdi-account-cog'
-                    },
-                    {
-                        name: 'Cargos',
-                        href: route('users.index'),
-                        role: 3,
-                        icon: 'mdi-account-cog'
-                    },
-                    {
-                        name: 'Ideales de respuesta',
-                        href: route('users.index'),
-                        role: 3,
+                        href: route('assessmentPeriods.index.view'),
+                        role: 10,
                         icon: 'mdi-account-cog'
                     },
                     {
                         name: 'Dependencias',
-                        href: route('users.index'),
-                        role: 3,
+                        href: route('dependencies.index.view'),
+                        role: 10,
+                        icon: 'mdi-account-cog'
+                    },
+                    {
+                        name: 'Funcionarios',
+                        href: route('functionaries.index.view'),
+                        role: 10,
+                        icon: 'mdi-account-cog'
+                    },
+                    {
+                        name: 'Posiciones',
+                        href: route('positions.index.view'),
+                        role: 10,
+                        icon: 'mdi-account-cog'
+                    },
+                    {
+                        name: 'Asignación de Cargos a Posiciones',
+                        href: route('positions.assignment.index.view'),
+                        role: 10,
+                        icon: 'mdi-account-cog'
+                    },
+                    {
+                        name: 'Clientes Externos',
+                        href: route('externalClients.index.view'),
+                        role: 10,
+                        icon: 'mdi-account-cog'
+                    },
+                    {
+                        name: 'Ideales de respuesta',
+                        href: route('responseIdeals.index.view'),
+                        role: 10,
+                        icon: 'mdi-account-cog'
+                    },
+                    {
+                        name: 'Competencias',
+                        href: route('competences.index.view'),
+                        role: 10,
                         icon: 'mdi-account-cog'
                     },
                     {
                         name: 'Formularios',
-                        href: route('users.index'),
-                        role: 3,
+                        href: route('forms.index.view'),
+                        role: 10,
                         icon: 'mdi-account-cog'
                     },
                     {
                         name: 'Compromisos',
-                        href: route('users.index'),
-                        role: 3,
+                        href: route('commitments.landing'),
+                        role: 10,
                         icon: 'mdi-account-cog'
                     },
                     {
                         name: 'Roles',
                         href: route('roles.index'),
-                        role: 3,
+                        role: 10,
                         icon: 'mdi-cog-box'
                     },
                     {
                         name: 'Usuarios',
                         href: route('users.index'),
+                        role: 10,
+                        icon: 'mdi-account-cog'
+                    },
+                ]
+            },
+
+            {
+                name: 'Gestionar',
+                role: 3,
+                active: false,
+                icon: 'mdi-cog-box',
+                items: [
+                    {
+                        name: 'Mis evaluaciones',
+                        href: route('tests.index.view'),
+                        role: 3,
+                        icon: 'mdi-cog-box'
+                    },
+                    {
+                        name: 'Compromisos',
+                        href: route('commitments.landing'),
                         role: 3,
                         icon: 'mdi-account-cog'
                     },
                 ]
-
             },
+
+            {
+                name: 'Gestionar',
+                role: 4,
+                active: false,
+                icon: 'mdi-cog-box',
+                items: [
+                    {
+                        name: 'Dependencias asignadas',
+                        href: route('redirect'),
+                        role: 4,
+                        icon: 'mdi-cog-box'
+                    },
+                ]
+            },
+
+
             {
                 name: 'Generar',
                 role: 10,
@@ -298,23 +365,31 @@ export default {
                 icon: 'mdi-cog-box',
                 items: [
                     {
-                        name: 'Reportes por compromisos',
-                        href: route('roles.index'),
-                        role: 1,
+                        name: 'Reportes por evaluación',
+                        href: route('reports.assessments.index'),
+                        role: 10,
                         icon: 'mdi-calendar'
                     },
-
                 ]
-
             },
         ],
         group: null,
         initials: '',
     }),
+
+    props: {
+        token: String
+    },
+
     methods: {
+
         logout() {
-            this.$inertia.post(route('logout'));
+            this.$refs.logoutform.submit();
         },
+
+        // logout() {
+        //     this.$inertia.post(route('logout'));
+        // },
 
         triggerFunction(functionName) {
             this[functionName]();
@@ -323,8 +398,19 @@ export default {
 
     async created() {
         //Get the inicials
+
+        console.log(this.$page.props.user,'the user');
         let name = this.$page.props.user.name;
-        let splitName = name.split(' ');
+        let splitName = "";
+
+        if (name.trim().indexOf(' ') !== -1){
+            splitName = name.split(' ');
+        }
+
+        else{
+            splitName = name;
+        }
+
         this.initials = `${splitName[0].charAt(0)}${splitName[1].charAt(0)}`;
 
     }

@@ -28,14 +28,24 @@ class Role extends Model
         return $selectedRole->customId;
     }
 
+    public static function getRoleIdByName(string $roleName): int
+    {
+        $selectedRole = self::where('name', '=', $roleName)->first();
+        if ($selectedRole === null) {
+            throw new \RuntimeException('El rol buscado no existe');
+        }
+        return $selectedRole->id;
+    }
+
+
     public static function assignRole(int $userId, int $roleId): void
     {
         DB::table('role_user')->insert(
             [
                 'user_id' => $userId,
                 'role_id' => $roleId,
-                'created_at' => Carbon::now('GMT-5')->toDateTimeString(),
-                'updated_at' => Carbon::now('GMT-5')->toDateTimeString(),
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString(),
             ]
         );
     }

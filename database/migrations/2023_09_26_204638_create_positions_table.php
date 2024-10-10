@@ -16,11 +16,17 @@ class CreatePositionsTable extends Migration
         Schema::create('positions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-
             $table->timestamps();
         });
     }
 
+//
+//$table->string('email');
+//$table->foreignId('assessment_period_id')->references('id')->on('assessment_periods');
+//$table->json('email_parameters');
+//$table->enum('status', ['Not Started', 'In Progress', 'Done']);
+//$table->enum('before_start_or_finish_assessment', ['Start', 'Finish']);
+//
     /**
      * Reverse the migrations.
      *
